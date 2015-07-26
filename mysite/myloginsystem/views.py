@@ -10,6 +10,7 @@ from django.views.generic.edit import UpdateView
 from myloginsystem.models import MyProfile
 from django.contrib.auth import get_user_model, authenticate,login
 from django.core.urlresolvers import reverse_lazy
+from django.contrib.auth import update_session_auth_hash
 # Create your views here.
 def register(request):
 #	if request.method == 'POST':
@@ -112,12 +113,12 @@ def logout_page(request):
 
 class UpdateProfile(UpdateView):
     model = MyProfile
-    fields = ['first_name', 'last_name',] # Keep listing whatever fields 
+    fields = ['first_name', 'last_name','image',] # Keep listing whatever fields 
     # the combined UserProfile and User exposes.
     template_name = 'user_update.html'
     slug_field = 'username'
     slug_url_kwarg = 'slug'
-#    success_url = reverse_lazy('')
+    success_url = '/myloginsystem/home/'
     def user_passes_test(self, request):
         if request.user.is_authenticated():
 	    print('request.user.isauthenticated')
@@ -143,3 +144,28 @@ def launch_page(request):
 	else:
 		print(request.user)
 		return HttpResponseRedirect('/myloginsystem/home/')
+
+def password_change(request):
+	if(request.method == 'POST'): 
+		print('request method is post')
+		form = PasswordChangeForm(user = request.user, data= request.POST)
+		if(form.is_valid()):
+			form.save()
+			update_session_auth_hash(request, form.user)
+	
+#		if(request.user.check_password(request.POST['old_password'])):
+
+#			request.user.set_password(request.POST['new_password'])i
+#			request.user.save()
+#			print('password has been reset')
+#			return HttpResponse("Password Changed Successfully")
+#		else:
+#			error_message = 'old password does not match'
+#			return render(request, 'changepassword.html',{'form' = form, 'error_message' = error_message })
+	else:
+		print('request method is not post')
+		form = PasswordChangeForm(user = request.user)
+		return render(request,'changepassword.html',{'form' : form } )
+		
+	
+

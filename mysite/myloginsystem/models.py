@@ -6,4 +6,4 @@ from django.contrib.auth.models import AbstractUser
 #	enrolment_no = models.IntegerField()
 
 class MyProfile(AbstractUser):
-    image = models.ImageField(upload_to='uploads/profile/')
+    image = models.ImageField(upload_to='myloginsystem/uploads/profile/')
