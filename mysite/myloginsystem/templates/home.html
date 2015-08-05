@@ -3,6 +3,7 @@
 {% block head %}Welcome to Django{% endblock %}
 {% block content %}
     <p>Welcome {{ user.username }} !!!</p>
-	<img src = "../../{{ user.image  }}"/>
+	{% load staticfiles %}
+	<img src = "{{ MEDIA_URL }}photos/{{ user.image  }}"/>
     <a href="/myloginsystem/logout/">Logout</a>
 {% endblock %}

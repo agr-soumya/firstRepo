@@ -1,9 +1,9 @@
-
+from django.conf import settings
 from django.conf.urls import patterns, include, url
 from myloginsystem.views import *
 from django.core.urlresolvers import reverse
 from django.contrib.auth import views as auth_views
- 
+from django.conf.urls.static import static 
 urlpatterns = patterns('',
 #    url(r'^$', 'django.contrib.auth.views.login'),
     url(r'^$', launch_page),
@@ -14,4 +14,6 @@ urlpatterns = patterns('',
     url(r'^home/$', home, name = "home"),
     url(r'^changepassword/$', auth_views.password_change,{'template_name':'changepassword.html', 'post_change_redirect' : 'myloginsystem/password/change/done' } ),
     url(r'^password/change/done/$',auth_views.password_change_done, name='password_change_done'),
-)
+#    (r'^home/media/(?P<path>.*)$', 'django.views.static.serve',
+#                 {'document_root': settings.MEDIA_ROOT}),
+) + static(settings.MEDIA_URL,document_root = settings.MEDIA_ROOT)
